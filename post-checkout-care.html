@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Deka Post-Checkout Care</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --paper: #FBF7F3; --surface: #FFFFFF; --surface-2: #F5EEE8;
+    --ink: #1E1420; --muted: #6E6069; --faint: #9A8C94; --line: #EADFD6;
+    --berry: #9B2D63; --berry-soft: #C65A8E; --berry-wash: #F6E7EF;
+    --gold: #B8893A; --good: #2E7D5B; --good-wash: #E2F0E9; --warn: #C2721B;
+    --shadow: 0 1px 2px rgba(30,20,32,.05), 0 8px 24px -12px rgba(30,20,32,.12);
+    --radius: 16px; color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #16111A; --surface: #1F1824; --surface-2: #281F2E;
+      --ink: #F3EAF0; --muted: #B6A6B2; --faint: #82717E; --line: #342A3B;
+      --berry: #D06A9A; --berry-soft: #B9558A; --berry-wash: #2C1C2A;
+      --gold: #D8B264; --good: #58B88C; --good-wash: #1A2A24; --warn: #E0973F;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px -14px rgba(0,0,0,.6);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #16111A; --surface: #1F1824; --surface-2: #281F2E;
+    --ink: #F3EAF0; --muted: #B6A6B2; --faint: #82717E; --line: #342A3B;
+    --berry: #D06A9A; --berry-soft: #B9558A; --berry-wash: #2C1C2A;
+    --gold: #D8B264; --good: #58B88C; --good-wash: #1A2A24; --warn: #E0973F;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px -14px rgba(0,0,0,.6);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: Inter, system-ui, -apple-system, sans-serif;
+    font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased;
+    font-feature-settings: "ss01";
+  }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 32px 16px 64px; }
+  .num { font-variant-numeric: tabular-nums; }
+
+  header { margin-bottom: 28px; }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--berry); margin: 0 0 14px;
+  }
+  .eyebrow::before { content: ""; width: 22px; height: 2px; background: var(--berry); border-radius: 2px; }
+  h1 {
+    font-family: Fraunces, Georgia, serif; font-weight: 600;
+    font-size: clamp(30px, 6vw, 46px); line-height: 1.04;
+    letter-spacing: -.01em; margin: 0 0 12px; text-wrap: balance;
+  }
+  h1 .thin { color: var(--muted); font-weight: 500; }
+  .sub { color: var(--muted); font-size: 15px; max-width: 64ch; margin: 0 0 16px; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 10px; font-size: 12.5px; color: var(--faint); }
+  .meta span { display: inline-flex; align-items: center; gap: 6px; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--good); display: inline-block; }
+
+  h2 {
+    font-family: Fraunces, Georgia, serif; font-weight: 600;
+    font-size: 20px; letter-spacing: -.01em; margin: 40px 0 16px;
+    display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+  }
+  h2 .tag { font-family: Inter; font-size: 11px; font-weight: 600; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--faint); }
+
+  .kpis { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  @media (min-width: 640px) { .kpis { grid-template-columns: repeat(4, 1fr); } }
+  .kpi {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 18px 16px; box-shadow: var(--shadow);
+  }
+  .kpi .cap { font-size: 11.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--faint); margin: 0 0 8px; }
+  .kpi .big { font-family: Fraunces, Georgia, serif; font-weight: 600; font-size: 34px; line-height: 1; letter-spacing: -.02em; }
+  .kpi .big.accent { color: var(--berry); }
+  .kpi .big.win { color: var(--good); }
+  .kpi .foot { font-size: 12.5px; color: var(--muted); margin-top: 7px; }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 20px; box-shadow: var(--shadow);
+  }
+  .grid-2 { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  @media (min-width: 720px) { .grid-2 { grid-template-columns: 1.15fr 1fr; } }
+
+  .seg { display: flex; height: 22px; border-radius: 7px; overflow: hidden; margin: 6px 0 18px; }
+  .seg i { display: block; height: 100%; }
+  .legend { display: grid; grid-template-columns: 1fr; gap: 9px; }
+  .legend .row { display: flex; align-items: center; gap: 10px; font-size: 13.5px; }
+  .legend .sw { width: 11px; height: 11px; border-radius: 3px; flex: 0 0 auto; }
+  .legend .lab { flex: 1 1 auto; min-width: 0; }
+  .legend .lab b { font-weight: 600; }
+  .legend .lab .d { color: var(--muted); font-size: 12px; }
+  .legend .val { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .legend .pct { color: var(--faint); font-size: 12px; width: 44px; text-align: right; font-variant-numeric: tabular-nums; }
+
+  .loc { display: grid; gap: 16px; }
+  .loc .r { display: grid; grid-template-columns: 92px 1fr auto; align-items: center; gap: 12px; }
+  .loc .nm { font-weight: 600; font-size: 13.5px; }
+  .loc .track { background: var(--surface-2); border-radius: 999px; height: 12px; position: relative; overflow: hidden; }
+  .loc .fill { position: absolute; left: 0; top: 0; height: 100%; border-radius: 999px;
+    background: linear-gradient(90deg, var(--berry-soft), var(--berry)); }
+  .loc .vv { font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .loc .vv b { color: var(--ink); font-weight: 600; }
+
+  .reach { display: grid; gap: 10px; }
+  .reach .step { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px;
+    background: var(--surface-2); border-radius: 10px; padding: 11px 14px; }
+  .reach .step .l { font-size: 13.5px; font-weight: 500; }
+  .reach .step .l .s { color: var(--muted); font-weight: 400; font-size: 12px; display: block; }
+  .reach .step .n { font-family: Fraunces, Georgia, serif; font-weight: 600; font-size: 22px; font-variant-numeric: tabular-nums; }
+  .reach .step.dim { opacity: .58; }
+  .reach .step.base { background: var(--berry-wash); }
+  .reach .step.base .n { color: var(--berry); }
+  .reach .step.hl { background: var(--good-wash); }
+  .reach .step.hl .n { color: var(--good); }
+
+  .mini { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  @media (min-width: 520px) { .mini { grid-template-columns: repeat(4, 1fr); } }
+  .mini .m { background: var(--surface-2); border-radius: 12px; padding: 14px; }
+  .mini .m .v { font-family: Fraunces, Georgia, serif; font-weight: 600; font-size: 26px; line-height: 1; }
+  .mini .m .k { font-size: 11.5px; color: var(--muted); margin-top: 6px; font-weight: 500; }
+  .mini .m.g .v { color: var(--good); }
+
+  .rev { display: grid; grid-template-columns: 1fr; gap: 18px; align-items: center; }
+  @media (min-width: 640px) { .rev { grid-template-columns: auto 1fr; } }
+  .rev .hero { text-align: center; padding: 6px 20px; }
+  .rev .hero .v { font-family: Fraunces, Georgia, serif; font-weight: 700; font-size: 46px; line-height: 1; color: var(--gold); letter-spacing: -.02em; }
+  .rev .hero .k { font-size: 12px; color: var(--muted); margin-top: 8px; text-transform: uppercase; letter-spacing: .06em; font-weight: 600; }
+  .rev .scale { display: grid; gap: 8px; }
+  .rev .scale .sr { display: grid; grid-template-columns: 70px 1fr 72px; align-items: center; gap: 10px; font-size: 13px; }
+  .rev .scale .sr .bar { height: 8px; background: var(--surface-2); border-radius: 999px; overflow: hidden; }
+  .rev .scale .sr .bf { height: 100%; background: var(--gold); opacity: .85; border-radius: 999px; }
+  .rev .scale .sr .amt { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .rev .scale .sr .tk { color: var(--muted); font-variant-numeric: tabular-nums; }
+
+  .note { background: var(--berry-wash); border: 1px solid var(--line); border-radius: 12px; padding: 13px 15px;
+    font-size: 13px; color: var(--muted); margin-top: 14px; }
+  .note.good { background: var(--good-wash); }
+  .note.flag { background: var(--surface-2); border-left: 3px solid var(--warn); }
+  .note b { color: var(--ink); font-weight: 600; }
+  .note .rca { display: inline-block; margin-top: 6px; font-size: 11px; font-weight: 600; letter-spacing: .04em;
+    text-transform: uppercase; color: var(--warn); }
+
+  .method { font-size: 12.5px; color: var(--muted); line-height: 1.6; margin: 0; padding-left: 18px; }
+  .method li { margin: 6px 0; }
+  .method b { color: var(--ink); }
+  footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 12px; color: var(--faint); }
+  .pill { display: inline-block; background: var(--surface-2); border-radius: 999px; padding: 2px 9px; font-size: 11px; font-weight: 600; color: var(--muted); }
+  .delta { display:inline-block; font-size: 11px; font-weight: 700; color: var(--good); margin-left: 4px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">Loyalty Campaign · Impact Review</p>
+    <h1>Deka Post-Checkout Care<br><span class="thin">the first eight weeks</span></h1>
+    <p class="sub">An automated SMS journey that follows every Deka Lash checkout. It first checks whether the client is already loyal or already rebooked — and only works the ones who've genuinely gone quiet, nudging them back into the chair for a refill.</p>
+    <div class="meta">
+      <span><span class="dot"></span> 3 live locations · Greentree, Washington, Wexford</span>
+      <span>· Launched late Aug 2026</span>
+      <span>· As of 13 Oct 2026</span>
+      <span>· Source: production (Zoca Aurora)</span>
+    </div>
+  </header>
+
+  <!-- KPIs -->
+  <div class="kpis">
+    <div class="kpi">
+      <p class="cap">Clients worked</p>
+      <div class="big num">77</div>
+      <div class="foot">reachable base, after exclusions</div>
+    </div>
+    <div class="kpi">
+      <p class="cap">Rebooked after a nudge</p>
+      <div class="big win num">26</div>
+      <div class="foot">34% of those worked</div>
+    </div>
+    <div class="kpi">
+      <p class="cap">Link click rate</p>
+      <div class="big accent num">22%</div>
+      <div class="foot">64 of 296 message links</div>
+    </div>
+    <div class="kpi">
+      <p class="cap">Opt-outs</p>
+      <div class="big num">3</div>
+      <div class="foot">of 77 — 3.9%</div>
+    </div>
+  </div>
+
+  <!-- The filter -->
+  <h2>Who the campaign actually worked <span class="tag">the base, cleaned up</span></h2>
+  <div class="card">
+    <div class="reach">
+      <div class="step dim"><div class="l">Entered the journey<span class="s">distinct clients off a completed visit on a targeted service — one enrollment per client / 30 days (of ~1,446 completed visits)</span></div><div class="n num">200</div></div>
+      <div class="step dim"><div class="l">Disqualified due to campaign criteria<span class="s">already a returning client, already rebooked, a member, or no service on the checkout to build a refill link</span></div><div class="n num">−123</div></div>
+      <div class="step base"><div class="l">Worked &amp; reachable<span class="s">the quiet clients it could actually nudge</span></div><div class="n num">77</div></div>
+      <div class="step hl"><div class="l">Rebooked after a nudge<span class="s">booked again after a message went out</span></div><div class="n num">26</div></div>
+    </div>
+    <div class="note flag"><b>Why 77, not 200.</b> 123 clients were disqualified by the campaign's own criteria — 100 at the first check (already loyal / already rebooked / member) and 23 whose checkout carried no service, so no refill booking link could be built. The honest "did the campaign work" denominator is the <b>77 it could actually reach</b>.
+      <span class="rca">⚑ the no-link cases are a data gap under root-cause review</span>
+    </div>
+  </div>
+
+  <!-- Outcomes of the 77 -->
+  <h2>What's happened to the 77 <span class="tag">reachable base</span></h2>
+  <div class="card">
+    <div class="seg" role="img" aria-label="Outcome split of 77 reachable clients">
+      <i style="width:33.8%;background:var(--good)" title="Rebooked after a nudge"></i>
+      <i style="width:46.8%;background:var(--berry-soft)" title="Still active"></i>
+      <i style="width:11.7%;background:var(--gold)" title="Finished, no rebooking yet"></i>
+      <i style="width:2.6%;background:var(--berry)" title="Became a member"></i>
+      <i style="width:3.9%;background:var(--warn)" title="Opted out"></i>
+      <i style="width:1.3%;background:var(--faint)" title="Send failed"></i>
+    </div>
+    <div class="legend">
+      <div class="row"><span class="sw" style="background:var(--good)"></span>
+        <span class="lab"><b>Rebooked after a nudge</b> <span class="d">— the message-driven win</span></span>
+        <span class="val num">26</span><span class="pct num">34%</span></div>
+      <div class="row"><span class="sw" style="background:var(--berry-soft)"></span>
+        <span class="lab"><b>Still active</b> <span class="d">— mid-sequence, more nudges to come</span></span>
+        <span class="val num">36</span><span class="pct num">47%</span></div>
+      <div class="row"><span class="sw" style="background:var(--gold)"></span>
+        <span class="lab"><b>Finished, no rebooking</b> <span class="d">— ran all steps, hasn't returned yet</span></span>
+        <span class="val num">9</span><span class="pct num">12%</span></div>
+      <div class="row"><span class="sw" style="background:var(--berry)"></span>
+        <span class="lab"><b>Became a member</b> <span class="d">— converted to membership, exited</span></span>
+        <span class="val num">2</span><span class="pct num">3%</span></div>
+      <div class="row"><span class="sw" style="background:var(--warn)"></span>
+        <span class="lab"><b>Opted out</b> <span class="d">— replied STOP after a message</span></span>
+        <span class="val num">3</span><span class="pct num">4%</span></div>
+      <div class="row"><span class="sw" style="background:var(--faint)"></span>
+        <span class="lab"><b>Send failed</b> <span class="d">— bad/undeliverable number</span></span>
+        <span class="val num">1</span><span class="pct num">1%</span></div>
+    </div>
+    <div class="note"><b>The 26 is a floor, not a ceiling.</b> Nearly half the reachable base is still mid-sequence — later nudges haven't fired for them yet, so the rebooking count only goes up from here. It was 20 three days ago.</div>
+  </div>
+
+  <!-- per location + messaging -->
+  <div class="grid-2" style="margin-top:12px">
+    <div class="card">
+      <h2 style="margin-top:0">By studio <span class="tag">rebooked after a nudge</span></h2>
+      <div class="loc">
+        <div class="r"><div class="nm">Washington</div>
+          <div class="track"><div class="fill" style="width:100%"></div></div>
+          <div class="vv"><b>10</b> / 26 msg · 38%</div></div>
+        <div class="r"><div class="nm">Wexford</div>
+          <div class="track"><div class="fill" style="width:90%"></div></div>
+          <div class="vv"><b>9</b> / 29 msg · 31%</div></div>
+        <div class="r"><div class="nm">Greentree</div>
+          <div class="track"><div class="fill" style="width:70%"></div></div>
+          <div class="vv"><b>7</b> / 22 msg · 32%</div></div>
+      </div>
+      <div class="note"><b>Washington leads</b> at a 38% rebook rate on messaged clients; Greentree and Wexford have closed the gap to ~31–32% and still have clients mid-sequence, so their numbers should climb further.</div>
+    </div>
+    <div class="card">
+      <h2 style="margin-top:0">Messaging health <span class="tag">the sends</span></h2>
+      <div class="mini" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+        <div class="m"><div class="v num">265</div><div class="k">messages sent<br>to 77 clients</div></div>
+        <div class="m g"><div class="v num">98%</div><div class="k">delivered<br>(5 failed)</div></div>
+        <div class="m"><div class="v num">112</div><div class="k">link clicks<br>64 of 296 links</div></div>
+      </div>
+      <div class="note good"><b>Delivery is clean.</b> 98% of the 265 messages went through; only 5 failed on bad numbers. The engine isn't dropping messages for reachable clients.</div>
+    </div>
+  </div>
+
+  <!-- true rebooking rate: organic + nudged -->
+  <h2>True rebooking rate <span class="tag">new clients who came back, nudged or not</span></h2>
+  <div class="card">
+    <div class="loc">
+      <div class="r"><div class="nm">Greentree</div>
+        <div class="track"><div class="fill" style="width:63%"></div></div>
+        <div class="vv"><b>26</b> / 41 · 63%</div></div>
+      <div class="r"><div class="nm">Washington</div>
+        <div class="track"><div class="fill" style="width:54%"></div></div>
+        <div class="vv"><b>19</b> / 35 · 54%</div></div>
+      <div class="r"><div class="nm">Wexford</div>
+        <div class="track"><div class="fill" style="width:52%"></div></div>
+        <div class="vv"><b>22</b> / 42 · 52%</div></div>
+    </div>
+    <div class="note good"><b>57% of new clients on these services rebooked</b> — 67 of 118, counting the ones who booked on their own AND the nudge-driven ones in both the numerator and the denominator. This is the overall rebooking health of these services, <b>not</b> the campaign's attributable win — that's the 26 of 77 (34%) above. The denominator is new candidate clients (excludes already-returning loyalists, members, and the no-link data gap).</div>
+  </div>
+
+  <!-- revenue -->
+  <h2>Revenue impact <span class="tag">message-attributable estimate</span></h2>
+  <div class="card">
+    <div class="rev">
+      <div class="hero">
+        <div class="v num">~$2.2k</div>
+        <div class="k">from 26 nudge rebookings</div>
+      </div>
+      <div class="scale">
+        <div class="sr"><span class="tk num">$70 ticket</span><span class="bar"><span class="bf" style="width:70%"></span></span><span class="amt num">$1,820</span></div>
+        <div class="sr"><span class="tk num">$85 ticket</span><span class="bar"><span class="bf" style="width:85%"></span></span><span class="amt num">$2,210</span></div>
+        <div class="sr"><span class="tk num">$100 ticket</span><span class="bar"><span class="bf" style="width:100%"></span></span><span class="amt num">$2,600</span></div>
+      </div>
+    </div>
+    <div class="note"><b>This counts only the 26 rebookings that followed a nudge</b> — not clients who'd already booked on their own. Deka runs on Mindbody, so Zoca never sees the actual sale amount; the figures are <b>26 × an assumed refill ticket</b>, so swap in Deka's real average for the exact number. And it's the <b>first</b> rebooking only — a retained lash client refills every 2–3 weeks, so lifetime value compounds well past this, and 36 reachable clients are still in flight.</div>
+  </div>
+
+  <!-- method -->
+  <h2>How this was measured <span class="tag">so you can trust it</span></h2>
+  <div class="card">
+    <ul class="method">
+      <li><b>Base = 77 reachable, not 200 entered.</b> Excluded: 100 filtered at the first check (already returning / rebooked / member) and 23 that couldn't be messaged because their checkout event carried no service id — so no refill booking link could be built and every send was skipped.</li>
+      <li><b>"Rebooked after a nudge" = 26.</b> Clients who received at least one message and then booked. Clients who'd already booked before any message were excluded from the win — the journey just detected the booking and exited them.</li>
+      <li><b>Scope.</b> The 3 live production journeys — <span class="pill">Greentree</span> <span class="pill">Washington</span> <span class="pill">Wexford</span>. Staging/test copies excluded.</li>
+      <li><b>Delivery &amp; clicks</b> are from the send log and the tracked-link click table; <b>opt-outs</b> are real STOP replies.</li>
+      <li><b>Still assisted, not A/B.</b> "Booked after a nudge" is strong attribution but not a controlled test — some of the 26 might have returned anyway.</li>
+      <li><b>Pulled live</b> from production on 13 Oct 2026 (previous pull 10 Oct: 70 reachable, 20 rebooked). The campaign is still enrolling, and numbers rise as the 36 active clients finish their sequence. The no-link cases are under separate root-cause review for a system fix.</li>
+    </ul>
+  </div>
+
+  <footer>
+    Deka Lash · Post-Checkout Care loyalty journey · figures from production as of 13 Oct 2026 · base is the 77 clients the journey could reach (100 first-check skips + 23 no-booking-link cases excluded) · revenue is an illustrative estimate pending Deka's real average ticket.
+  </footer>
+
+</div>
+</body>
+</html>
